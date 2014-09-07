@@ -21,6 +21,7 @@ DB.create_table?(:users) do
   index [:email, :secret], unique: true
 end
 
+SCrypt::Engine::calibrate
 class CLI < Thor
   desc 'save email password', 'Save an email and password to database'
   def save(email, pass)
@@ -29,7 +30,6 @@ class CLI < Thor
       puts "Email: #{email}, already exists"
       return
     end
-    SCrypt::Engine::calibrate
     salt = SCrypt::Engine.generate_salt
 
     p = SCrypt::Engine.hash_secret(pass, salt)
